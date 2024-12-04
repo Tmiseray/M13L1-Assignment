@@ -1,0 +1,73 @@
+Building a Modular Factory Management System with Flask
+
+Objective: 
+The aim of this assignment is to develop a modular factory management system using Flask, incorporating the Factory Application Pattern, Flask Blueprints for modular design, and implementing API throttling and rate limiting with Flask-Limiter. This assignment will help students understand how to structure large Flask applications, improve code organization, and manage API access efficiently.
+
+Problem Statement: 
+You are tasked with building a comprehensive factory management system that can handle various aspects of factory operations, including managing employees, tracking production, and monitoring inventory. To ensure scalability and maintainability, you need to implement the Factory Application Pattern for configuration and implementation, utilize Flask Blueprints for modular design, and incorporate API throttling and rate limiting using Flask-Limiter. Use the following Models as a base.
+
+
+# models.py
+
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+class Employee(db.Model):
+    __tablename__ = 'employees'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    position = db.Column(db.String(100), nullable=False)
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
+
+class Customer(db.Model):
+    __tablename__ = 'customers'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+
+class Production(db.Model):
+    __tablename__ = 'production'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    quantity_produced = db.Column(db.Integer, nullable=False)
+    date_produced = db.Column(db.Date, nullable=False)
+
+
+Task 1: Implement Factory Application Pattern
+    - Configure the Flask application using the Factory Application Pattern to enable easy configuration and instantiation of the application.
+    - Organize the application structure into modules for better code organization and maintainability.
+
+Task 2: Utilize Flask Blueprints for Modular Design
+    - Create Flask Blueprints to modularize different aspects of the factory management system, such as employee management, production tracking, and inventory monitoring.
+    - Register these Blueprints with the Flask application to enable modularity and separation of concerns.
+
+Task 3: Implement API Throttling and Rate Limiting
+    - Integrate Flask-Limiter into the application to implement API throttling and rate limiting functionality.
+    - Configure rate limits for different API endpoints to prevent abuse and ensure fair usage of resources.
+
+Task 4: Create Endpoints for CRUD Operations
+    - For each model (Employee, Product, Order, Customer, and Production), create endpoints for performing Create and Fetching All operations.
+    - Use the REST Resource Naming Conventions to design the endpoint URLs and methods.
+    - Ensure that the endpoints adhere to the principles of RESTful API design, including the use of nouns for resource names, plural nouns for collection names, hyphens to separate words, and lowercase letters.
+
+
+Expected Outcomes:
+    - Successful implementation of the Factory Application Pattern for configuration and instantiation of the Flask application, enhancing scalability and maintainability.
+    - Utilization of Flask Blueprints to modularize different components of the factory management system, improving code organization and separation of concerns.
+    - Implementation of API throttling and rate limiting using Flask-Limiter to manage API access efficiently and prevent abuse of resources.
+    - Creation of endpoints for Create and List All operations for each model in the factory management system, following the principles of RESTful API design and adhering to REST Resource Naming Conventions.
