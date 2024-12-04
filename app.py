@@ -32,7 +32,7 @@ def create_app(config_name):
 def blueprint_config(app):
     app.register_blueprint(employee_blueprint, url_prefix='/employees')
     app.register_blueprint(customer_blueprint, url_prefix='/customers')
-    app.register_blueprint(product_blueprint, url_prefix='/productss')
+    app.register_blueprint(product_blueprint, url_prefix='/products')
     app.register_blueprint(order_blueprint, url_prefix='/orders')
     app.register_blueprint(production_blueprint, url_prefix='/productions')
 

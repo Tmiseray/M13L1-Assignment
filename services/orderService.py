@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.order import Order
+from models.product import Product
 from circuitbreaker import circuit
 from sqlalchemy import select
 
@@ -10,12 +11,17 @@ def fallback_function(order):
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(order_data):
     try:
-        if order_data['name'] == "Failure":
+        if order_data['customer_id'] == "Failure":
             raise Exception('Failure condition triggered')
         
         with Session(db.engine) as session:
             with session.begin():
-                new_order = Order(customer_id=order_data['customer_id'], product_id=order_data['product_id'], quantity=order_data['quantity'])
+                product = session.get(Product, order_data['product_id'])
+                if not product:
+                    raise ValueError("Invalid product ID")
+                
+                total_price = order_data['quantity'] * product.price
+                new_order = Order(customer_id=order_data['customer_id'], product_id=order_data['product_id'], quantity=order_data['quantity'], total_price = total_price)
                 session.add(new_order)
                 session.commit()
             session.refresh(new_order)

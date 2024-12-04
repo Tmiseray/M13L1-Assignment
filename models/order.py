@@ -1,6 +1,7 @@
 from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
-from typing import List
+from sqlalchemy import event
+from models.product import Product
 
 class Order(Base):
     __tablename__ = 'Orders'
@@ -13,3 +14,10 @@ class Order(Base):
     customer: Mapped['Customer'] = db.relationship(back_populates='orders')
     product: Mapped['Product'] = db.relationship(primaryjoin='Order.product_id == Product.id')
     
+
+@event.listens_for(Order, 'before_update')
+def update_total_price(mapper, connection, target):
+    if target.product_id:
+        product = db.session.get(Product, target.product_id)
+        if product:
+            target.total_price = target.quantity * product.price
