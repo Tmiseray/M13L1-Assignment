@@ -7,9 +7,11 @@ class CustomerSchema(ma.Schema):
     name = fields.String(required=True)
     email = fields.String(required=True)
     phone = fields.String(required=True)
+    createdAt = fields.DateTime(required=False)
+    updatedAt = fields.DateTime(required=False)
 
     class Meta:
-        fields = ("id", "name", "email", "phone")
+        fields = ("id", "name", "email", "phone", "createdAt", "updatedAt")
 
 
 customer_schema = CustomerSchema()

@@ -6,6 +6,8 @@ class ProductSchema(ma.Schema):
     id = fields.Integer(required=False)
     name = fields.String(required=True, validate=validate.Length(min=1))
     price = fields.Float(required=True, validate=validate.Range(min=0))
+    createdAt = fields.DateTime(required=False)
+    updatedAt = fields.DateTime(required=False)
 
 
 product_schema = ProductSchema()

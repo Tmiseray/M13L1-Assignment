@@ -10,12 +10,12 @@ def fallback_function(production):
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(production_data):
     try:
-        if production_data['product_id'] == "Failure":
+        if production_data['productId'] == "Failure":
             raise Exception('Failure condition triggered')
         
         with Session(db.engine) as session:
             with session.begin():
-                new_production = Production(product_id=production_data['product_id'], quantity_produced=production_data['quantity_produced'], date_produced=production_data['date_produced'])
+                new_production = Production(productId=production_data['productId'], quantityProduced=production_data['quantityProduced'], dateProduced=production_data['dateProduced'])
                 session.add(new_production)
                 session.commit()
             session.refresh(new_production)

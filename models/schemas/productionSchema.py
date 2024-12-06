@@ -3,9 +3,11 @@ from schema import ma
 
 class ProductionSchema(ma.Schema):
     id = fields.Integer(required=False)
-    product_id = fields.Integer(required=True)
-    quantity_produced = fields.Integer(required=True)
-    date_produced = fields.Date(required=True)
+    productId = fields.Integer(required=True)
+    quantityProduced = fields.Integer(required=True)
+    dateProduced = fields.Date(required=True)
+    createdAt = fields.DateTime(required=False)
+    updatedAt = fields.DateTime(required=False)
 
 
 production_schema = ProductionSchema()

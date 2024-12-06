@@ -11,17 +11,17 @@ def fallback_function(order):
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(order_data):
     try:
-        if order_data['customer_id'] == "Failure":
+        if order_data['customerId'] == "Failure":
             raise Exception('Failure condition triggered')
         
         with Session(db.engine) as session:
             with session.begin():
-                product = session.get(Product, order_data['product_id'])
+                product = session.get(Product, order_data['productId'])
                 if not product:
                     raise ValueError("Invalid product ID")
                 
                 total_price = order_data['quantity'] * product.price
-                new_order = Order(customer_id=order_data['customer_id'], product_id=order_data['product_id'], quantity=order_data['quantity'], total_price = total_price)
+                new_order = Order(customerId=order_data['customerId'], productId=order_data['productId'], quantity=order_data['quantity'], totalPrice = total_price)
                 session.add(new_order)
                 session.commit()
             session.refresh(new_order)
