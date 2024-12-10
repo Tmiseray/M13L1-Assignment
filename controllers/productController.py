@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from models.schemas.productSchema import product_schema, products_schema
+from models.schemas.productSchema import product_schema, products_schema, top_product_schema
 from services import productService
 from marshmallow import ValidationError
 from caching import cache
@@ -22,3 +22,11 @@ def save():
 def find_all():
     products = productService.find_products()
     return products_schema.jsonify(products), 200
+
+def top_selling_products():
+    try:
+        analysis_data = productService.top_selling_products()
+        response = top_product_schema.dump(analysis_data)
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({ "error": str(e) }), 500

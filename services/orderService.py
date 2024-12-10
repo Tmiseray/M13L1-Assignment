@@ -3,7 +3,7 @@ from database import db
 from models.order import Order
 from models.product import Product
 from circuitbreaker import circuit
-from sqlalchemy import select
+from sqlalchemy import select, func
 
 def fallback_function(order):
     return None
@@ -35,3 +35,4 @@ def find_orders():
     query = select(Order)
     orders = db.session.execute(query).scalars().all()
     return orders
+

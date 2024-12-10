@@ -11,6 +11,11 @@ class ProductSchema(ma.Schema):
     updatedBy = fields.Integer(allow_none=True)
     updatedAt = fields.Date(dump_only=True)
 
+class TopProductSchema(ma.Schema):
+    productName = fields.String(required=True)
+    totalItemsSold = fields.Integer(required=True)
+
+top_product_schema = TopProductSchema(many=True)
 
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)

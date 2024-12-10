@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.product import Product
+from models.order import Order
 from circuitbreaker import circuit
-from sqlalchemy import select
+from sqlalchemy import select, func
 
 def fallback_function(product):
     return None
@@ -28,4 +29,14 @@ def save(product_data):
 def find_products():
     query = select(Product)
     products = db.session.execute(query).scalars().all()
+    return products
+
+def top_selling_products():
+    query = select(
+        Product.name.label('productName'),
+        func.sum(Order.quantity).label('totalItemsSold')
+    ).join(Order, Product.id == Order.productId)
+    query = query.group_by(Product.name).order_by(Order.quantity, 'DESC')
+
+    products = db.session.execute(query).all()
     return products

@@ -11,6 +11,5 @@ class OrderSchema(ma.Schema):
     createdAt = fields.DateTime(required=False)
     updatedAt = fields.DateTime(required=False)
 
-
 order_schema = OrderSchema()
 orders_schema = OrderSchema(many=True)
