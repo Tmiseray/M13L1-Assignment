@@ -35,10 +35,14 @@ def find_employees():
 
 
 def employees_total_productions():
-    query = select(
-        Employee.name.label('employeeName'),
-        func.sum(Production.quantityProduced).label('totalItemsProduced')).join(Production, Employee.id == Production.updatedBy)
-    query = query.group_by(Employee.name)
+    query = (
+        select(
+            Employee.name.label('employeeName'),
+            func.sum(Production.quantityProduced).label('totalItemsProduced')
+        )
+        .join(Production, Employee.id == Production.updatedBy)
+        .group_by(Employee.name)
+    )
         
     productions = db.session.execute(query).all()
     return productions

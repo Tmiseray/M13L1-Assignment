@@ -35,10 +35,15 @@ def find_customers():
 
 
 def customers_loyalty_value():
-    query = select(
-        Customer.name.label('customerName'),
-        func.sum(Order.totalPrice).label('lifetimeLoyaltyValue')
-    ).join(Order, Customer.id == Order.customerId).group_by(Customer.name).having(func.sum(Order.totalPrice) >= 50)
+    query = (
+        select(
+            Customer.name.label('customerName'),
+            func.sum(Order.totalPrice).label('lifetimeLoyaltyValue')
+        )
+        .join(Order, Customer.id == Order.customerId)
+        .group_by(Customer.name)
+        .having(func.sum(Order.totalPrice) >= 50)
+    )
 
     loyal_customers = db.session.execute(query).all()
     return loyal_customers

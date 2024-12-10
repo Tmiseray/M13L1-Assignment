@@ -35,11 +35,15 @@ def find_products():
 
 
 def top_selling_products():
-    query = select(
-        Product.name.label('productName'),
-        func.sum(Order.quantity).label('totalItemsSold')
-    ).join(Order, Product.id == Order.productId)
-    query = query.group_by('productName').order_by(desc('totalItemsSold'))
+    query = (
+        select(
+            Product.name.label('productName'),
+            func.sum(Order.quantity).label('totalItemsSold')
+        )
+        .join(Order, Product.id == Order.productId)
+        .group_by('productName')
+        .order_by(desc('totalItemsSold'))
+    )
 
     products = db.session.execute(query).all()
     return products
