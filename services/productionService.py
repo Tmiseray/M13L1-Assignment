@@ -1,12 +1,14 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.production import Production
-from models.employee import Employee
+from models.product import Product
 from circuitbreaker import circuit
 from sqlalchemy import select, func
 
+
 def fallback_function(production):
     return None
+
 
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(production_data):
@@ -42,11 +44,27 @@ def find_productions():
     productions = db.session.execute(query).scalars().all()
     return productions
 
-def employees_total_productions():
-    query = select(
-        Employee.name.label('employeeName'),
-        func.sum(Production.quantityProduced).label('totalItemsProduced')).join(Production, Employee.id == Production.updatedBy)
-    query = query.group_by(Employee.name)
-        
-    productions = db.session.execute(query).all()
-    return productions
+
+def production_efficiency(date):
+    subquery = (
+        select(
+            Production.productId.label('productId'),
+            Production.dateProduced.label('productionDate'),
+            func.sum(Production.quantityProduced).label('quantityProducedOnDate')
+        )
+        .where(Production.dateProduced == date)
+        .group_by(Production.productId, Production.dateProduced)
+        .subquery()
+    )
+
+    query = (
+        select(
+            Product.name.label('productName'),
+            subquery.c.quantityProducedOnDate,
+            subquery.c.productionDate
+        )
+        .join(subquery, Product.id == subquery.c.productId)
+    )
+
+    efficiency = db.session.execute(query).all()
+    return efficiency

@@ -1,11 +1,14 @@
 from sqlalchemy.orm import Session
 from database import db
 from models.employee import Employee
+from models.production import Production
 from circuitbreaker import circuit
-from sqlalchemy import select
+from sqlalchemy import select, func
+
 
 def fallback_function(employee):
     return None
+
 
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(employee_data):
@@ -29,3 +32,13 @@ def find_employees():
     query = select(Employee)
     employees = db.session.execute(query).scalars().all()
     return employees
+
+
+def employees_total_productions():
+    query = select(
+        Employee.name.label('employeeName'),
+        func.sum(Production.quantityProduced).label('totalItemsProduced')).join(Production, Employee.id == Production.updatedBy)
+    query = query.group_by(Employee.name)
+        
+    productions = db.session.execute(query).all()
+    return productions

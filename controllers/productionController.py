@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from models.schemas.productionSchema import production_schema, productions_schema, employee_production_schema
+from models.schemas.productionSchema import production_schema, productions_schema, production_efficiency_schema
 from services import productionService
 from marshmallow import ValidationError
 from caching import cache
@@ -24,10 +24,10 @@ def find_all():
     return productions_schema.jsonify(productions), 200
 
 
-def employees_total_productions():
+def production_efficiency(date):
     try:
-        analysis_data = productionService.employees_total_productions()
-        response = employee_production_schema.dump(analysis_data)
+        analysis_data = productionService.production_efficiency(date)
+        response = production_efficiency_schema.dump(analysis_data)
         return jsonify(response), 200
     except Exception as e:
         return jsonify({ "error": str(e) }), 500

@@ -5,8 +5,10 @@ from models.order import Order
 from circuitbreaker import circuit
 from sqlalchemy import select, func, desc
 
+
 def fallback_function(product):
     return None
+
 
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(product_data):
@@ -30,6 +32,7 @@ def find_products():
     query = select(Product)
     products = db.session.execute(query).scalars().all()
     return products
+
 
 def top_selling_products():
     query = select(

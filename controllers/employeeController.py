@@ -1,6 +1,6 @@
 from flask import request, jsonify
-from models.schemas.employeeSchema import employee_schema, employees_schema
-from services import employeeService
+from models.schemas.employeeSchema import employee_schema, employees_schema, employee_production_schema
+from services import employeeService, productionService
 from marshmallow import ValidationError
 from caching import cache
 
@@ -22,3 +22,11 @@ def save():
 def find_all():
     employees = employeeService.find_employees()
     return employees_schema.jsonify(employees), 200
+
+def employees_total_productions():
+    try:
+        analysis_data = productionService.employees_total_productions()
+        response = employee_production_schema.dump(analysis_data)
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({ "error": str(e) }), 500

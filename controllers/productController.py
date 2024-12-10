@@ -23,6 +23,7 @@ def find_all():
     products = productService.find_products()
     return products_schema.jsonify(products), 200
 
+
 def top_selling_products():
     try:
         analysis_data = productService.top_selling_products()

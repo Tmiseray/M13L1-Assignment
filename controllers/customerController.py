@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from models.schemas.customerSchema import customer_schema, customers_schema
+from models.schemas.customerSchema import customer_schema, customers_schema, loyal_customers_schema
 from services import customerService
 from marshmallow import ValidationError
 from caching import cache
@@ -22,3 +22,12 @@ def save():
 def find_all():
     customers = customerService.find_customers()
     return customers_schema.jsonify(customers), 200
+
+
+def customers_loyalty_value():
+    try:
+        analysis_data = customerService.customers_loyalty_value()
+        response = loyal_customers_schema.dump(analysis_data)
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({ "error": str(e) }), 500

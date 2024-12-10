@@ -11,12 +11,12 @@ class ProductionSchema(ma.Schema):
     updatedBy = fields.Integer(allow_none=True)
     updatedAt = fields.Date(dump_only=True)
 
-class EmployeeProductionSchema(ma.Schema):
-    employeeName = fields.String(required=True)
-    products = fields.Nested('ProductSchema', many=True, required=False)
-    totalItemsProduced = fields.Integer(required=True)
+class ProductionEfficiencySchema(ma.Schema):
+    productName = fields.String(required=True)
+    productionDate = fields.Date(required=True)
+    quantityProducedOnDate = fields.Integer(required=True)
 
-employee_production_schema = EmployeeProductionSchema(many=True)
+production_efficiency_schema = ProductionEfficiencySchema(many=True)
 
 production_schema = ProductionSchema()
 productions_schema = ProductionSchema(many=True)
