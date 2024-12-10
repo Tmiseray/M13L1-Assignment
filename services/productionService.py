@@ -16,7 +16,18 @@ def save(production_data):
         
         with Session(db.engine) as session:
             with session.begin():
-                new_production = Production(productId=production_data['productId'], quantityProduced=production_data['quantityProduced'], dateProduced=production_data['dateProduced'])
+                if not production_data.get('createdBy'):
+                    raise ValueError("Missing required field: 'createdBy'")
+                
+                new_production = Production(productId=production_data['productId'],
+                        quantityProduced=production_data['quantityProduced'],
+                        dateProduced=production_data['dateProduced'],
+                        createdBy=production_data['createdBy']
+                    )
+                
+                if not production_data.get('updatedBy'):
+                    new_production.updatedBy = production_data['createdBy']
+                    
                 session.add(new_production)
                 session.commit()
             session.refresh(new_production)
@@ -34,9 +45,8 @@ def find_productions():
 def employees_total_productions():
     query = select(
         Employee.name.label('employeeName'),
-        func.sum(Production.quantityProduced).label('totalItemsProduced')
-        .join(Production).where(Employee.id == Production.updatedBy)
-        .group_by(Employee.name)
-        )
+        func.sum(Production.quantityProduced).label('totalItemsProduced')).join(Production, Employee.id == Production.updatedBy)
+    query = query.group_by(Employee.name)
+        
     productions = db.session.execute(query).all()
     return productions
