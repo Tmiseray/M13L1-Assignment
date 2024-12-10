@@ -3,7 +3,7 @@ from database import db
 from models.product import Product
 from models.order import Order
 from circuitbreaker import circuit
-from sqlalchemy import select, func
+from sqlalchemy import select, func, desc
 
 def fallback_function(product):
     return None
@@ -36,7 +36,7 @@ def top_selling_products():
         Product.name.label('productName'),
         func.sum(Order.quantity).label('totalItemsSold')
     ).join(Order, Product.id == Order.productId)
-    query = query.group_by(Product.name).order_by(Order.quantity, 'DESC')
+    query = query.group_by('productName').order_by(desc('totalItemsSold'))
 
     products = db.session.execute(query).all()
     return products
