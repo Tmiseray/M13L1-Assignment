@@ -10,6 +10,7 @@ def fallback_function(employee):
     return None
 
 
+# Save New Employee Data
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(employee_data):
     try:
@@ -28,12 +29,14 @@ def save(employee_data):
         raise e
     
 
+# Get All Employees
 def find_employees():
     query = select(Employee)
     employees = db.session.execute(query).scalars().all()
     return employees
 
 
+# Employees Total Productions
 def employees_total_productions():
     query = (
         select(

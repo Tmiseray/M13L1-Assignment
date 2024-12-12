@@ -10,6 +10,7 @@ def fallback_function(production):
     return None
 
 
+# Save New Production Data
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(production_data):
     try:
@@ -39,12 +40,14 @@ def save(production_data):
         raise e
     
 
+# Get All Productions
 def find_productions():
     query = select(Production)
     productions = db.session.execute(query).scalars().all()
     return productions
 
 
+# Production Efficiency Analysis
 def production_efficiency(date):
     subquery = (
         select(

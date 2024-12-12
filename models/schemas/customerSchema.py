@@ -13,9 +13,11 @@ class CustomerSchema(ma.Schema):
     class Meta:
         fields = ("id", "name", "email", "phone", "createdAt", "updatedAt")
 
+
 class LoyalCustomersSchema(ma.Schema):
     customerName = fields.String(required=True)
     lifetimeLoyaltyValue = fields.Float(required=True)
+
 
 loyal_customers_schema = LoyalCustomersSchema(many=True)
 

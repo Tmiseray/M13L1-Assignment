@@ -10,6 +10,7 @@ def fallback_function(product):
     return None
 
 
+# Save New Product Data
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
 def save(product_data):
     try:
@@ -28,12 +29,26 @@ def save(product_data):
         raise e
     
 
+# Get All Products
 def find_products():
     query = select(Product)
     products = db.session.execute(query).scalars().all()
     return products
 
 
+# Paginate Products
+def paginate_products(page=1, per_page=10):
+    query = db.session.query(Product).order_by(Product.name.desc())
+    products = query.offset((page - 1) * per_page).limit(per_page).all()
+    total_items = db.session.query(Product).count()
+
+    return {
+        'products': products,
+        'totalItems': total_items,
+    }
+
+
+# Top Selling Products
 def top_selling_products():
     query = (
         select(

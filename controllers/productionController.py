@@ -5,6 +5,7 @@ from marshmallow import ValidationError
 from caching import cache
 
 
+# Save New Production Data
 def save():
     try:
         production_data = production_schema.load(request.json)
@@ -18,12 +19,15 @@ def save():
         return jsonify({"message": "Fallback method error activated", "body": production_data}), 400
     
 
+# Get All Productions
 @cache.cached(timeout=60)
 def find_all():
     productions = productionService.find_productions()
     return productions_schema.jsonify(productions), 200
 
 
+# Production Efficiency Analysis
+@cache.cached(timeout=60)
 def production_efficiency(date):
     try:
         analysis_data = productionService.production_efficiency(date)

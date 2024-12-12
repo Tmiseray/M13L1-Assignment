@@ -12,10 +12,12 @@ class EmployeeSchema(ma.Schema):
     class Meta:
         fields = ("id", "name", "position", "createdAt", "updatedAt")
 
+
 class EmployeeProductionSchema(ma.Schema):
     employeeName = fields.String(required=True)
     products = fields.Nested('ProductSchema', many=True, required=False)
     totalItemsProduced = fields.Integer(required=True)
+
 
 employee_production_schema = EmployeeProductionSchema(many=True)
 

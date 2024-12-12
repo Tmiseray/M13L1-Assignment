@@ -1,10 +1,13 @@
-from flask import request, jsonify
-from models.schemas.orderSchema import order_schema, orders_schema
+from flask import request, jsonify, Response
+from models.schemas.orderSchema import order_schema, orders_schema, paginate_orders_schema
 from services import orderService
 from marshmallow import ValidationError
+from collections import OrderedDict
+import json
 from caching import cache
 
 
+# Save New Order Data
 def save():
     try:
         order_data = order_schema.load(request.json)
@@ -18,8 +21,35 @@ def save():
         return jsonify({"message": "Fallback method error activated", "body": order_data}), 400
     
 
+# Get All Orders
 @cache.cached(timeout=60)
 def find_all():
     orders = orderService.find_orders()
     return orders_schema.jsonify(orders), 200
 
+
+# Paginate Orders
+def paginate_orders():
+    try:
+        page = request.args.get('page', 1, type=int)
+        perPage = request.args.get('perPage', 10, type=int)
+        
+        pagination_data = orderService.paginate_orders(page=page, per_page=perPage)
+
+        totalItems = pagination_data['totalItems']
+        totalPages = (totalItems + perPage - 1) // perPage
+
+        response_dict = OrderedDict([
+            ('orders', pagination_data['orders']),
+            ('totalItems', totalItems),
+            ('totalPages', totalPages),
+            ('currentPage', page),
+            ('perPage', perPage),
+        ])
+
+        return Response(
+            json.dumps(paginate_orders_schema.dump(response_dict)),
+            mimetype='application/json'
+        )
+    except Exception as e:
+        return jsonify({ "error": str(e) }), 500

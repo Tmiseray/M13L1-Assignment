@@ -5,6 +5,7 @@ from marshmallow import ValidationError
 from caching import cache
 
 
+# Save New Customer Data
 def save():
     try:
         customer_data = customer_schema.load(request.json)
@@ -18,12 +19,15 @@ def save():
         return jsonify({"message": "Fallback method error activated", "body": customer_data}), 400
     
 
+# Get All Customers
 @cache.cached(timeout=60)
 def find_all():
     customers = customerService.find_customers()
     return customers_schema.jsonify(customers), 200
 
 
+# Customers Loyalty Value
+@cache.cached(timeout=60)
 def customers_loyalty_value():
     try:
         analysis_data = customerService.customers_loyalty_value()
