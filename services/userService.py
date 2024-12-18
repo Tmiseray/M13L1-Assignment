@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from database import db
-from models.employee import Employee
 from models.user import User
 from circuitbreaker import circuit
 from sqlalchemy import select, func

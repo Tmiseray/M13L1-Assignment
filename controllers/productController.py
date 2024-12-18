@@ -32,6 +32,7 @@ def find_all():
 
 
 # Paginate Products
+@cache.cached(timeout=60)
 def paginate_products():
     try:
         page = request.args.get('page', 1, type=int)
