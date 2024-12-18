@@ -10,10 +10,10 @@ SECRETKEY = os.getenv('SECRETKEY')
 
 def encode_token(userId, roleName):
     payload = {
-        'exp' = datetime.now() + timedelta(days=0, hours=1),
-        'iat' = datetime.now(),
-        'sub' = userId,
-        'role' = roleName
+        'exp': datetime.now() + timedelta(days=0, hours=1),
+        'iat': datetime.now(),
+        'sub': userId,
+        'role': roleName
     }
     token = jwt.encode(payload, SECRETKEY, algorithm='HS256')
     return token

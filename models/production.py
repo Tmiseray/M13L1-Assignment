@@ -1,6 +1,8 @@
-from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import event, select
+from models.employee import Employee
+from models.product import Product
+from database import db, Base
 import datetime
 
 class Production(Base):

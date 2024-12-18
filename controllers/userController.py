@@ -20,8 +20,8 @@ def login():
     
 
 # Save New User Data
-@token_required
-@role_required('admin')
+# @token_required
+# @role_required('admin')
 def save():
     try:
         user_data = user_schema.load(request.json)

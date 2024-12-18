@@ -1,5 +1,8 @@
-from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
+from models.employee import Employee
+from models.customer import Customer
+from database import db, Base
+from sqlalchemy import and_
 import datetime
 
 class User(Base):
@@ -13,6 +16,22 @@ class User(Base):
     createdAt: Mapped[datetime.date] = mapped_column(db.Date, nullable=False, default=datetime.datetime.now())
     updatedAt: Mapped[datetime.date] = mapped_column(db.Date, nullable=False, default=datetime.datetime.now(), onupdate=datetime.datetime.now())
 
-    employee: Mapped['Employee'] = db.relationship(uselist=False, primary_join='and_(User.accountId == Employee.id, User.role == "admin")')
+    employee: Mapped['Employee'] = db.relationship(
+        'Employee',
+        primaryjoin=and_(
+            accountId == Employee.id,
+            role == "admin"
+            ),
+        foreign_keys=[accountId],
+        uselist=False,
+        )
 
-    customer: Mapped['Customer'] = db.relationship(uselist=False, primary_join='and_(User.accountId == Customer.id, User.role == "user")')
+    customer: Mapped['Customer'] = db.relationship(
+        'Customer',
+        primaryjoin=and_(
+            accountId == Customer.id,
+            role == "user"
+            ),
+        foreign_keys=[accountId],
+        uselist=False,
+        )

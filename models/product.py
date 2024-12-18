@@ -1,5 +1,6 @@
-from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
+from models.employee import Employee
+from database import db, Base
 import datetime
 
 class Product(Base):

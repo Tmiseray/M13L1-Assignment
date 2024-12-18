@@ -1,5 +1,6 @@
-from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
+from models.order import Order
+from database import db, Base
 from typing import List
 import datetime
 
