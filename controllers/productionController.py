@@ -3,9 +3,12 @@ from models.schemas.productionSchema import production_schema, productions_schem
 from services import productionService
 from marshmallow import ValidationError
 from caching import cache
+from utils.util import token_required, role_required
 
 
 # Save New Production Data
+@token_required
+@role_required('admin')
 def save():
     try:
         production_data = production_schema.load(request.json)
@@ -20,6 +23,8 @@ def save():
     
 
 # Get All Productions
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def find_all():
     productions = productionService.find_productions()
@@ -27,6 +32,8 @@ def find_all():
 
 
 # Production Efficiency Analysis
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def production_efficiency(date):
     try:

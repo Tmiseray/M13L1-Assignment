@@ -5,9 +5,12 @@ from marshmallow import ValidationError
 from collections import OrderedDict
 import json
 from caching import cache
+from utils.util import token_required, role_required
 
 
 # Save New Order Data
+@token_required
+@role_required('admin')
 def save():
     try:
         order_data = order_schema.load(request.json)
@@ -22,6 +25,8 @@ def save():
     
 
 # Get All Orders
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def find_all():
     orders = orderService.find_orders()
@@ -29,6 +34,8 @@ def find_all():
 
 
 # Paginate Orders
+@token_required
+@role_required('admin')
 def paginate_orders():
     try:
         page = request.args.get('page', 1, type=int)

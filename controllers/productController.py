@@ -5,9 +5,12 @@ from marshmallow import ValidationError
 from collections import OrderedDict
 import json
 from caching import cache
+from utils.util import token_required, role_required
 
 
 # Save New Product Data
+@token_required
+@role_required('admin')
 def save():
     try:
         product_data = product_schema.load(request.json)

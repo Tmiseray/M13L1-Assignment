@@ -3,9 +3,12 @@ from models.schemas.employeeSchema import employee_schema, employees_schema, emp
 from services import employeeService
 from marshmallow import ValidationError
 from caching import cache
+from utils.util import token_required, role_required
 
 
 # Save New Employee Data
+@token_required
+@role_required('admin')
 def save():
     try:
         employee_data = employee_schema.load(request.json)
@@ -20,6 +23,8 @@ def save():
     
 
 # Get All Employees
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def find_all():
     employees = employeeService.find_employees()
@@ -27,6 +32,8 @@ def find_all():
 
 
 # Employees Total Productions
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def employees_total_productions():
     try:

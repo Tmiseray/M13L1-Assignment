@@ -3,9 +3,12 @@ from models.schemas.customerSchema import customer_schema, customers_schema, loy
 from services import customerService
 from marshmallow import ValidationError
 from caching import cache
+from utils.util import token_required, role_required
 
 
 # Save New Customer Data
+@token_required
+@role_required('admin')
 def save():
     try:
         customer_data = customer_schema.load(request.json)
@@ -20,6 +23,8 @@ def save():
     
 
 # Get All Customers
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def find_all():
     customers = customerService.find_customers()
@@ -27,6 +32,8 @@ def find_all():
 
 
 # Customers Loyalty Value
+@token_required
+@role_required('admin')
 @cache.cached(timeout=60)
 def customers_loyalty_value():
     try:
