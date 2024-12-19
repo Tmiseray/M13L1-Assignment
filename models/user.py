@@ -4,6 +4,7 @@ from models.customer import Customer
 from database import db, Base
 from sqlalchemy import and_
 import datetime
+import bcrypt
 
 class User(Base):
     __tablename__= 'Users'
@@ -35,3 +36,12 @@ class User(Base):
         foreign_keys=[accountId],
         uselist=False,
         )
+    
+    def __init__(self, **kwargs):
+        if 'password' in kwargs:
+            password = kwargs['password']
+            kwargs['password'] = bcrypt.hashpw(
+                password.encode('utf-8'), 
+                bcrypt.gensalt()
+            ).decode('utf-8')
+        super().__init__(**kwargs)

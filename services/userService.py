@@ -4,6 +4,7 @@ from models.user import User
 from circuitbreaker import circuit
 from sqlalchemy import select, func
 from utils.util import encode_token
+import bcrypt
 
 
 def fallback_function(user):
@@ -12,9 +13,13 @@ def fallback_function(user):
 
 # User Login
 def login(username, password):
-    user = (db.session.execute(db.select(User).where(User.username == username, User.password == password)).scalar_one_or_none())
-    roleName = user.role
-    if user:
+    user = (db.session.execute(db.select(User).where(User.username == username)).scalar_one_or_none())
+
+    if user and bcrypt.checkpw(
+        password.encode('utf-8'), 
+        user.password.encode('utf-8')
+    ):
+        roleName = user.role
         auth_token = encode_token(user.id, roleName)
         resp = {
             "status": "success",
