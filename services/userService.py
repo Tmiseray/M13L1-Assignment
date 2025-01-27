@@ -29,7 +29,7 @@ def login(username, password):
         return resp
     else:
         return None
-    
+
 
 # Save New User Data
 @circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_function)
@@ -58,3 +58,10 @@ def find_users():
     query = select(User)
     users = db.session.execute(query).scalars().all()
     return users
+
+
+# # Get Single User by ID
+# def find_user_by_id(id, accountId):
+#     query = select(User).where(User.id == id & User.accountId == accountId)
+#     user = db.session.execute(query).scalar_one_or_none()
+#     return user

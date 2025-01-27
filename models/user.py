@@ -43,5 +43,6 @@ class User(Base):
             kwargs['password'] = bcrypt.hashpw(
                 password.encode('utf-8'), 
                 bcrypt.gensalt()
-            ).decode('utf-8')
+            )
+            # .decode('utf-8')
         super().__init__(**kwargs)
