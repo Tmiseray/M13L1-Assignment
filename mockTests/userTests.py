@@ -2,6 +2,9 @@ import unittest
 from unittest.mock import MagicMock, patch
 from faker import Faker
 import bcrypt
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from services.userService import login
 
 
@@ -21,7 +24,7 @@ class TestUserEndpoints(unittest.TestCase):
             )
         mock_user.return_value.scalar_one_or_none.return_value = mock_account
 
-        response = login(mock_account.username, password)
+        response = login(mock_account.username, mock_account.password)
 
         self.assertEqual(response['status'], 'success')
 
