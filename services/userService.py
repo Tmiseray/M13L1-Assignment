@@ -16,8 +16,8 @@ def login(username, password):
     user = (db.session.execute(db.select(User).where(User.username == username)).scalar_one_or_none())
 
     if user and bcrypt.checkpw(
-        password.decode('utf-8'), 
-        user.password.encode('utf-8')
+        password.encode('utf-8'), 
+        user.password
     ):
         roleName = user.role
         auth_token = encode_token(user.id, roleName)

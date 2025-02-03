@@ -15,16 +15,17 @@ class TestUserEndpoints(unittest.TestCase):
         faker = Faker()
         mock_account = MagicMock()
         mock_account.id = 1
-        mock_account.role = [MagicMock(role='admin')]
+        mock_account.role = 'admin'
         password = faker.password()
-        mock_account.username = faker.user_name()
-        mock_account.password = bcrypt.hashpw(
+        hashed_password = bcrypt.hashpw(
                 password.encode('utf-8'), 
                 bcrypt.gensalt()
             )
+        mock_account.username = faker.user_name()
+        mock_account.password = hashed_password
         mock_user.return_value.scalar_one_or_none.return_value = mock_account
 
-        response = login(mock_account.username, mock_account.password)
+        response = login(mock_account.username, password)
 
         self.assertEqual(response['status'], 'success')
 
@@ -36,14 +37,21 @@ class TestUserEndpoints(unittest.TestCase):
         mock_account.id = 1
         mock_account.role = [MagicMock(role='admin')]
         password = faker.password()
-        mock_account.username = faker.user_name()
-        mock_account.password = bcrypt.hashpw(
+        hashed_password = bcrypt.hashpw(
                 password.encode('utf-8'), 
                 bcrypt.gensalt()
             )
-        mock_user.query.filter.return_value.scalar_one_or_none.return_value = mock_account
+        mock_account.username = faker.user_name()
+        mock_account.password = hashed_password
+        mock_user.return_value.scalar_one_or_none.return_value = mock_account
 
-        response = login(mock_account.username, faker.password())
+        incorrect_password = faker.password()
+        # incorrect_hashed_password = bcrypt.hashpw(
+        #         incorrect_password.encode('utf-8'), 
+        #         bcrypt.gensalt()
+        #     )
+
+        response = login(mock_account.username, incorrect_password)
 
         self.assertIsNone(response)
 
