@@ -10,31 +10,13 @@ from services.userService import login
 
 class TestUserEndpoints(unittest.TestCase):
 
+    @patch('services.userService.encode_token', return_value='dummy_token')
     @patch('services.userService.db.session.execute')
-    def test_login(self, mock_user):
+    def test_login(self, mock_user, mock_token):
+        # Arrange
         faker = Faker()
         mock_account = MagicMock()
-        mock_account.id = 1
-        mock_account.role = 'admin'
-        password = faker.password()
-        hashed_password = bcrypt.hashpw(
-                password.encode('utf-8'), 
-                bcrypt.gensalt()
-            )
-        mock_account.username = faker.user_name()
-        mock_account.password = hashed_password
-        mock_user.return_value.scalar_one_or_none.return_value = mock_account
-
-        response = login(mock_account.username, password)
-
-        self.assertEqual(response['status'], 'success')
-
-    
-    @patch('services.userService.db.session.execute')
-    def test_fail_login(self, mock_user):
-        faker = Faker()
-        mock_account = MagicMock()
-        mock_account.id = 1
+        mock_account.id = faker.random_int()
         mock_account.role = [MagicMock(role='admin')]
         password = faker.password()
         hashed_password = bcrypt.hashpw(
@@ -43,16 +25,42 @@ class TestUserEndpoints(unittest.TestCase):
             )
         mock_account.username = faker.user_name()
         mock_account.password = hashed_password
+
+        # Mock query chain
+        mock_user.return_value.scalar_one_or_none.return_value = mock_account
+
+        # Act
+        response = login(mock_account.username, password)
+
+        # Assert
+        self.assertEqual(response['status'], 'success')
+        self.assertEqual(response['authToken'], 'dummy_token')
+
+    
+    @patch('services.userService.db.session.execute')
+    def test_fail_login(self, mock_user):
+        # Arrange
+        faker = Faker()
+        mock_account = MagicMock()
+        mock_account.id = faker.random_int()
+        mock_account.role = [MagicMock(role='admin')]
+        password = faker.password()
+        hashed_password = bcrypt.hashpw(
+                password.encode('utf-8'), 
+                bcrypt.gensalt()
+            )
+        mock_account.username = faker.user_name()
+        mock_account.password = hashed_password
+
+        # Mock query chain
         mock_user.return_value.scalar_one_or_none.return_value = mock_account
 
         incorrect_password = faker.password()
-        # incorrect_hashed_password = bcrypt.hashpw(
-        #         incorrect_password.encode('utf-8'), 
-        #         bcrypt.gensalt()
-        #     )
 
+        # Act
         response = login(mock_account.username, incorrect_password)
 
+        # Assert
         self.assertIsNone(response)
 
 

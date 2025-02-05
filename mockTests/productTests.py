@@ -28,6 +28,8 @@ class ProductServiceTests(unittest.TestCase):
         # Arrange
         faker = Faker()
         expected_products = [faker.word(), faker.word()]
+
+        # Mock query chain
         mock_products.return_value.scalars.return_value.all.return_value = expected_products
 
         # Act
@@ -36,15 +38,17 @@ class ProductServiceTests(unittest.TestCase):
         # Assert
         self.assertEqual(result, expected_products)
 
-    @patch('services.productService.db.session.execute')
-    def test_paginate_products(self, mock_products):
+    @patch('services.productService.db.session.query')
+    def test_paginate_products(self, mock_query):
         # Arrange
         faker = Faker()
-        page = 1
-        per_page = 10
+        page = faker.random_int(1, 10)
+        per_page = faker.random_int(5, 50, step=5)
         expected_products = [faker.word() for _ in range(per_page)]
-        mock_products.return_value.scalars.return_value.all.return_value = expected_products
-        mock_products.return_value.scalars.return_value.all.return_value = len(expected_products)
+
+        # Mock query chain
+        mock_query.return_value.order_by.return_value.offset.return_value.limit.return_value.all.return_value = expected_products
+        mock_query.return_value.count.return_value = len(expected_products)
 
         # Act
         result = paginate_products(page, per_page)
@@ -54,11 +58,11 @@ class ProductServiceTests(unittest.TestCase):
         self.assertEqual(result['totalItems'], len(expected_products))
 
     @patch('services.productService.db.session.execute')
-    def test_top_selling_products(self, mock_products):
+    def test_top_selling_products(self, mock_execute):
         # Arrange
         faker = Faker()
         expected_products = [faker.word() for _ in range(5)]
-        mock_products.return_value.scalars.return_value.all.return_value = expected_products
+        mock_execute.return_value.all.return_value = expected_products
 
         # Act
         result = top_selling_products()
