@@ -3,6 +3,18 @@ from database import db
 from schema import ma
 from limiter import limiter
 from caching import cache
+from flask_swagger_ui import get_swaggerui_blueprint
+
+SWAGGER_URL = '/api/docs'
+API_URL = '/static/swagger.yaml'
+
+swagger_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'Factory Management System API'
+    }
+)
 
 from models.employee import Employee
 from models.customer import Customer
@@ -38,6 +50,7 @@ def blueprint_config(app):
     app.register_blueprint(order_blueprint, url_prefix='/api/orders')
     app.register_blueprint(production_blueprint, url_prefix='/api/productions')
     app.register_blueprint(user_blueprint, url_prefix='/api/users')
+    app.register_blueprint(swagger_blueprint, url_prefix=SWAGGER_URL)
 
 
 def configure_rate_limit():

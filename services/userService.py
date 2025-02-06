@@ -58,10 +58,3 @@ def find_users():
     query = select(User)
     users = db.session.execute(query).scalars().all()
     return users
-
-
-# # Get Single User by ID
-# def find_user_by_id(id, accountId):
-#     query = select(User).where(User.id == id & User.accountId == accountId)
-#     user = db.session.execute(query).scalar_one_or_none()
-#     return user

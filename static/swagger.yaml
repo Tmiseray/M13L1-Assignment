@@ -1,0 +1,1416 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Factory Management System API'
+  description: 'API for the Factory Management System'
+host: '127.0.0.1:5000'
+schemes:
+  - 'http'
+consumes:
+  - 'application/json'
+produces:
+  - 'application/json'
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+paths: 
+  /api/employees:
+    post:
+      tags:
+        - employees
+      summary: 'Create a new employee'
+      description: 'Create a new employee'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Employee object that needs to be added to the system'
+          required: true
+          schema:
+            $ref: '#/definitions/Employee'
+      responses:
+        200:
+          description: 'Employee created successfully'
+          schema:
+            $ref: '#/definitions/EmployeeResponse'
+          examples:
+            application/json:
+              value:
+                name: 'John Doe'
+                position: 'Manager'
+                id: 1
+                status: 'Success'
+                message: 'Employee created successfully'
+        400:
+          description: 'Bad request'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Invalid input'
+    get:
+      tags:
+        - employees
+      summary: 'Get all employees'
+      description: 'Get all employees'
+      responses:
+        200:
+          description: 'List of employees'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/EmployeeList'
+          examples:
+            application/json:
+              value:
+                - name: 'John Doe'
+                  position: 'Manager'
+                  id: 1
+                - name: 'Jane Doe'
+                  position: 'Supervisor'
+                  id: 2
+                - status: 'Success'
+                - message: 'Employees retrieved successfully'
+        401:
+          description: 'Unauthorized access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Unauthorized | Authentication required'
+        403:
+          description: 'Forbidden access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Forbidden | Permission not allowed'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Resource not found | Page not found'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+      security:
+        - bearerAuth: []
+  /api/customers:
+    post:
+      tags:
+        - customers
+      summary: 'Create a new customer'
+      description: 'Create a new customer'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Customer object that needs to be added to the system'
+          required: true
+          schema:
+            $ref: '#/definitions/Customer'
+      responses:
+        200:
+          description: 'Customer created successfully'
+          schema:
+            $ref: '#/definitions/CustomerResponse'
+          examples:
+            application/json:
+              value:
+                id: 1
+                name: 'John Doe'
+                email: 'john.doe@example.com'
+                phone: '1234567890'
+                createdAt: '2021-01-01'
+                updatedAt: '2021-01-01'
+                status: 'Success'
+                message: 'Customer created successfully'
+        400:
+          description: 'Bad request'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Invalid input'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+    get:
+      tags:
+        - customers
+      summary: 'Get all customers'
+      description: 'Get all customers'
+      responses:
+        200:
+          description: 'List of customers'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/CustomerList'
+          examples:
+            application/json:
+              value:
+                - name: 'John Doe'
+                  email: 'john.doe@example.com'
+                  phone: '1234567890'
+                  id: 1
+                - name: 'Jane Doe'
+                  email: 'jane.doe@example.com'
+                  phone: '0987654321'
+                  id: 2
+                - status: 'Success'
+                - message: 'Customers retrieved successfully'
+        401:
+          description: 'Unauthorized access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Unauthorized | Authentication required'
+        403:
+          description: 'Forbidden access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Forbidden | Permission not allowed'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Resource not found | Page not found'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+      security:
+        - bearerAuth: []
+  /api/products:
+    post:
+      tags:
+        - products
+      summary: 'Create a new product'
+      description: 'Create a new product'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Product object that needs to be added to the system'
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      responses:
+        200:
+          description: 'Product created successfully'
+          schema:
+            $ref: '#/definitions/ProductResponse'
+          examples:
+            application/json:
+              value:
+                id: 1
+                name: 'Product A'
+                price: 100.00
+                createdBy: 1
+                createdAt: '2021-01-01'
+                updatedBy: 1
+                updatedAt: '2021-01-01'
+                status: 'Success'
+                message: 'Product created successfully'
+        400:
+          description: 'Bad request'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Invalid input'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error' 
+    get:
+      tags:
+        - products
+      summary: 'Get all products'
+      description: 'Get all products'
+      responses:
+        200:
+          description: 'List of products'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/ProductList'
+          examples:
+            application/json:
+              value:
+                - id: 1
+                  name: 'Product A'
+                  price: 100.00
+                  createdBy: 1
+                  createdAt: '2021-01-01'
+                  updatedBy: 1
+                  updatedAt: '2021-01-01'
+                - id: 2
+                  name: 'Product B'
+                  price: 200.00
+                  createdBy: 2
+                  createdAt: '2021-01-02'
+                  updatedBy: 2
+                  updatedAt: '2021-01-02'
+                - status: 'Success'
+                - message: 'Products retrieved successfully'
+        401:
+          description: 'Unauthorized access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Unauthorized | Authentication required'
+        403:
+          description: 'Forbidden access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Forbidden | Permission not allowed'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Resource not found | Page not found'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+  /api/orders:
+    post:
+      tags:
+        - orders
+      summary: 'Create a new order'
+      description: 'Create a new order'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Order object that needs to be added to the system'
+          required: true
+          schema:
+            $ref: '#/definitions/Order'
+      responses:
+        200:
+          description: 'Order created successfully'
+          schema:
+            $ref: '#/definitions/OrderResponse'
+          examples:
+            application/json:
+              value:
+                id: 1
+                customer_id: 1
+                product_id: 1
+                quantity: 10
+                totalPrice: 1000.00
+                createdAt: '2021-01-01'
+                updatedAt: '2021-01-01'
+                status: 'Success'
+                message: 'Order created successfully'
+        400:
+          description: 'Bad request'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Invalid input'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+    get:
+      tags:
+        - orders
+      summary: 'Get all orders'
+      description: 'Get all orders'
+      responses:
+        200:
+          description: 'List of orders'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/OrderList'
+          examples:
+            application/json:
+              value:
+                - id: 1
+                  customerId: 1
+                  productId: 1
+                  quantity: 10
+                  totalPrice: 1000.00
+                  createdAt: '2021-01-01'
+                  updatedAt: '2021-01-01'
+                - id: 2
+                  customerId: 2
+                  productId: 2
+                  quantity: 20
+                  totalPrice: 2000.00
+                  createdAt: '2021-01-02'
+                  updatedAt: '2021-01-02'
+                - status: 'Success'
+                - message: 'Orders retrieved successfully'
+        401:
+          description: 'Unauthorized access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Unauthorized | Authentication required'
+        403:
+          description: 'Forbidden access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Forbidden | Permission not allowed'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Resource not found | Page not found'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+      security:
+        - bearerAuth: []
+  /api/productions:
+    post:
+      tags:
+        - productions
+      summary: 'Create a new production'
+      description: 'Create a new production'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Production object that needs to be added to the system'
+          required: true
+          schema:
+            $ref: '#/definitions/Production'
+      responses:
+        200:
+          description: 'Production created successfully'
+          schema:
+            $ref: '#/definitions/ProductionResponse'
+          examples:
+            application/json:
+              value:
+                id: 1
+                productId: 1
+                quantityProduced: 100
+                dateProduced: '2021-01-01'
+                createdBy: 1
+                createdAt: '2021-01-01'
+                updatedBy: 1
+                updatedAt: '2021-01-01'
+                status: 'Success'
+                message: 'Production created successfully'
+        400:
+          description: 'Bad request'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Invalid input'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+    get:
+      tags:
+        - productions
+      summary: 'Get all productions'
+      description: 'Get all productions'
+      responses:
+        200:
+          description: 'List of productions'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/ProductionList'
+          examples:
+            application/json:
+              value:
+                - id: 1
+                  productId: 1
+                  quantityProduced: 100
+                  dateProduced: '2021-01-01'
+                  createdBy: 1
+                  createdAt: '2021-01-01'
+                  updatedBy: 1
+                  updatedAt: '2021-01-01'
+                - id: 2
+                  productId: 2
+                  quantityProduced: 200
+                  dateProduced: '2021-01-02'
+                  createdBy: 2
+                  createdAt: '2021-01-02'
+                  updatedBy: 2
+                  updatedAt: '2021-01-02'
+                - status: 'Success'
+                - message: 'Productions retrieved successfully'
+        401:
+          description: 'Unauthorized access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Unauthorized | Authentication required'
+        403:
+          description: 'Forbidden access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Forbidden | Permission not allowed'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Resource not found | Page not found'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+      security:
+        - bearerAuth: []
+  /api/users:
+    post:
+      tags:
+        - users
+      summary: 'Create a new user'
+      description: 'Create a new user'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'User object that needs to be added to the system'
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: 'User created successfully'
+          schema:
+            $ref: '#/definitions/UserResponse'
+          examples:
+            application/json:
+              value:
+                id: 1
+                username: 'johndoe'
+                password: 'password'
+                role: 'admin'
+                accountId: 1
+                status: 'Success'
+                message: 'User created successfully'
+        400:
+          description: 'Bad request'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Invalid input'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+    get:
+      tags:
+        - users
+      summary: 'Get all users'
+      description: 'Get all users'
+      responses:
+        200:
+          description: 'List of users'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/UserList'
+          examples:
+            application/json:
+              value:
+                - id: 1
+                  username: 'johndoe'
+                  password: 'password'
+                  role: 'admin'
+                  accountId: 1
+                - id: 2
+                  username: 'janedoe'
+                  password: 'password'
+                  role: 'user'
+                  accountId: 2
+                - status: 'Success'
+                - message: 'Users retrieved successfully'
+        401:
+          description: 'Unauthorized access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Unauthorized | Authentication required'
+        403:
+          description: 'Forbidden access'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Forbidden | Permission not allowed'
+        404:
+          description: 'Not found'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Resource not found | Page not found'
+        500:
+          description: 'Internal server error'
+          schema:
+            $ref: '#/definitions/Error'
+          examples:
+            application/json:
+              value:
+                status: 'error'
+                message: 'Internal server error'
+      security:
+        - bearerAuth: []
+definitions: 
+  Error:
+    type: 'object'
+    properties:
+      status:
+        type: 'string'
+        description: 'error status'
+      message:
+        type: 'string'
+        description: 'error message'
+    required:
+      - status
+      - message
+  Employee:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Employee ID'
+      name:
+        type: 'string'
+        description: 'Employee name'
+      position:
+        type: 'string'
+        description: 'Employee position'
+    required:
+      - name
+      - position
+  EmployeeResponse:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Employee ID'
+      name:
+        type: 'string'
+        description: 'Employee name'
+      position:
+        type: 'string'
+        description: 'Employee position'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - name
+      - position
+      - status
+      - message
+  EmployeeList:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Employee ID'
+      name:
+        type: 'string'
+        description: 'Employee name'
+      position:
+        type: 'string'
+        description: 'Employee position'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - name
+      - position
+      - status
+      - message
+  Customer:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Customer ID'
+      name:
+        type: 'string'
+        description: 'Customer name'
+      email:
+        type: 'string'
+        description: 'Customer email'
+      phone:
+        type: 'string'
+        description: 'Customer phone number'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Customer'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Customer'
+    required:
+      - name
+      - email
+      - phone
+  CustomerResponse:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Customer ID'
+      name:
+        type: 'string'
+        description: 'Customer name'
+      email:
+        type: 'string'
+        description: 'Customer email'
+      phone:
+        type: 'string'
+        description: 'Customer phone number'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Customer'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Customer'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - name
+      - email
+      - phone
+      - createdAt
+      - updatedAt
+      - status
+      - message
+  CustomerList:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Customer ID'
+      name:
+        type: 'string'
+        description: 'Customer name'
+      email:
+        type: 'string'
+        description: 'Customer email'
+      phone:
+        type: 'string'
+        description: 'Customer phone number'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Customer'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Customer'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - name
+      - email
+      - phone
+      - createdAt
+      - updatedAt
+      - status
+      - message
+  Product:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID'
+      name:
+        type: 'string'
+        description: 'Product name'
+      price:
+        type: 'number'
+        format: 'double'
+        description: 'Product price'
+      createdBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of creator'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Product'
+      updatedBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of last updater'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Product'
+    required:
+      - name
+      - price
+  ProductResponse:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID'
+      name:
+        type: 'string'
+        description: 'Product name'
+      price:
+        type: 'number'
+        format: 'double'
+        description: 'Product price'
+      createdBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of creator'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Product'
+      updatedBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of last updater'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Product'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - name
+      - price
+      - createdBy
+      - createdAt
+      - updatedBy
+      - updatedAt
+      - status
+      - message
+  ProductList:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID'
+      name:
+        type: 'string'
+        description: 'Product name'
+      price:
+        type: 'number'
+        format: 'double'
+        description: 'Product price'
+      createdBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of creator'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Product'
+      updatedBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of last updater'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Product'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - name
+      - price
+      - createdBy
+      - createdAt
+      - updatedBy
+      - updatedAt
+      - status
+      - message
+  Order:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Order ID'
+      customerId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Customer ID for order'
+      productId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID for order'
+      quantity:
+        type: 'integer'
+        format: 'int64'
+        description: 'Quantity of product ordered'
+      totalPrice:
+        type: 'number'
+        format: 'double'
+        description: 'Total price of order'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Order'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Order'
+    required:
+      - customerId
+      - productId
+      - quantity
+  OrderResponse:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Order ID'
+      customerId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Customer ID for order'
+      productId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID for order'
+      quantity:
+        type: 'integer'
+        format: 'int64'
+        description: 'Quantity of product ordered'
+      totalPrice:
+        type: 'number'
+        format: 'double'
+        description: 'Total price of order'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Order'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Order'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - customerId
+      - productId
+      - quantity
+      - totalPrice
+      - createdAt
+      - updatedAt
+      - status
+      - message
+  OrderList:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Order ID'
+      customerId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Customer ID for order'
+      productId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID for order'
+      quantity:
+        type: 'integer'
+        format: 'int64'
+        description: 'Quantity of product ordered'
+      totalPrice:
+        type: 'number'
+        format: 'double'
+        description: 'Total price of order'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Order'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Order'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - customerId
+      - productId
+      - quantity
+      - totalPrice
+      - createdAt
+      - updatedAt
+      - status
+      - message
+  Production:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Production ID'
+      productId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID for production'
+      quantityProduced:
+        type: 'integer'
+        format: 'int64'
+        description: 'Quantity of product produced'
+      dateProduced:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of production'
+      createdBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of creator'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Production'
+      updatedBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of last updater'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Production'
+    required:
+      - productId
+      - quantityProduced
+  ProductionResponse:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Production ID'
+      productId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID for production'
+      quantityProduced:
+        type: 'integer'
+        format: 'int64'
+        description: 'Quantity of product produced'
+      dateProduced:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of production'
+      createdBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of creator'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Production'
+      updatedBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of last updater'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Production'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - productId
+      - quantityProduced
+      - dateProduced
+      - createdBy
+      - createdAt
+      - updatedBy
+      - updatedAt
+      - status
+      - message
+  ProductionList:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'Production ID'
+      productId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Product ID for production'
+      quantityProduced:
+        type: 'integer'
+        format: 'int64'
+        description: 'Quantity of product produced'
+      dateProduced:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of production'
+      createdBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of creator'
+      createdAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of creation for Production'
+      updatedBy:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID of last updater'
+      updatedAt:
+        type: 'string'
+        format: 'date'
+        example: '2021-01-01'
+        readOnly: true
+        description: 'Date of last update for Production'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - productId
+      - quantityProduced
+      - dateProduced
+      - createdBy
+      - createdAt
+      - updatedBy
+      - updatedAt
+      - status
+      - message
+  User:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID'
+      username:
+        type: 'string'
+        description: 'Username'
+      password:
+        type: 'string'
+        format: 'password'
+        description: 'Password'
+      role:
+        type: 'string'
+        description: 'User role'
+      accountId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Account ID linked to user'
+    required:
+      - username
+      - password
+  UserResponse:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID'
+      username:
+        type: 'string'
+        description: 'Username'
+      password:
+        type: 'string'
+        format: 'password'
+        description: 'Password'
+      role:
+        type: 'string'
+        description: 'User role'
+      accountId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Account ID linked to user'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - username
+      - password
+      - role
+      - accountId
+      - status
+      - message
+  UserList:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+        description: 'User ID'
+      username:
+        type: 'string'
+        description: 'Username'
+      password:
+        type: 'string'
+        format: 'password'
+        description: 'Password'
+      role:
+        type: 'string'
+        description: 'User role'
+      accountId:
+        type: 'integer'
+        format: 'int64'
+        description: 'Account ID linked to user'
+      status:
+        type: 'string'
+        description: 'status of response'
+      message:
+        type: 'string'
+        description: 'message for response'
+    required:
+      - id
+      - username
+      - password
+      - role
+      - accountId
+      - status
+      - message
